@@ -11,7 +11,7 @@ export default function ProductHighlights() {
     useEffect(() => {
         async function fetchProducts() {
             try {
-                const res = await axios.get("http://localhost:5000/products")
+                const res = await axios.get("https://e-products-server.vercel.app/products")
                 // Take only the first 8 products
                 setProducts(res.data.slice(0, 8))
             } catch (err) {
@@ -37,7 +37,7 @@ export default function ProductHighlights() {
                     {products.map((product) => (
                         <div
                             key={product._id}
-                            className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition"
+                            className="bg-white p-6 rounded-lg border-2 border-b-blue-600 shadow hover:shadow-lg transition"
                         >
                             <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                             <p className="text-gray-600 mb-4">{product.description}</p>
@@ -45,7 +45,7 @@ export default function ProductHighlights() {
 
                             {product.image && (
                                 <img
-                                    src={`http://localhost:5000/uploads/${product.image}`}
+                                    src={`https://e-products-server.vercel.app/uploads/${product.image}`}
                                     alt={product.name}
                                     className="w-full h-40 object-cover rounded mb-4"
                                 />

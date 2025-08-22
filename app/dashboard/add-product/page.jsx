@@ -1,71 +1,59 @@
-"use client"
+"use client";
 
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import axios from "axios"
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Toaster, toast } from "react-hot-toast";
 
 export default function AddProductPage() {
-    const { data: session, status } = useSession()
-    const router = useRouter()
+    const { data: session, status } = useSession();
+    const router = useRouter();
 
     const [formData, setFormData] = useState({
         name: "",
         price: "",
         description: "",
-        image: null,
-    })
-    const [imagePreview, setImagePreview] = useState(null)
-    const [loading, setLoading] = useState(false)
+    });
+    const [loading, setLoading] = useState(false);
 
     // Redirect unauthenticated users
     useEffect(() => {
-        if (status === "unauthenticated") {
-            router.push("/login")
-        }
-    }, [status, router])
+        if (status === "unauthenticated") router.push("/login");
+    }, [status, router]);
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target
-        if (name === "image" && files.length > 0) {
-            setFormData({ ...formData, image: files[0] })
-            setImagePreview(URL.createObjectURL(files[0]))
-        } else {
-            setFormData({ ...formData, [name]: value })
-        }
-    }
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
-        setLoading(true)
+        e.preventDefault();
+        setLoading(true);
 
         try {
-            const data = new FormData()
-            data.append("name", formData.name)
-            data.append("price", formData.price)
-            data.append("description", formData.description)
-            if (formData.image) data.append("image", formData.image)
+            await axios.post("https://e-products-server.vercel.app/products", formData);
 
-            await axios.post("http://localhost:5000/products", data, {
-                headers: { "Content-Type": "multipart/form-data" },
-            })
+            toast.success("✅ Product added successfully!");
+            setFormData({ name: "", price: "", description: "" });
 
-            alert("Product added successfully!")
-            setFormData({ name: "", price: "", description: "", image: null })
-            setImagePreview(null)
-            router.push("/dashboard/products") // Redirect to products list page
+            // Redirect after 1 second to allow toast to be visible
+            setTimeout(() => {
+                router.push("/products");
+            }, 1000);
         } catch (error) {
-            console.error(error)
-            alert("Failed to add product.")
+            console.error(error);
+            toast.error("❌ Failed to add product.");
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
-    if (status === "loading") return <p>Loading...</p>
+    if (status === "loading") return <p>Loading...</p>;
 
     return (
         <div className="max-w-md mx-auto my-10 p-6 bg-white shadow rounded">
+            <Toaster position="top-right" />
             <h1 className="text-2xl font-bold mb-4">Add New Product</h1>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input
@@ -94,20 +82,6 @@ export default function AddProductPage() {
                     className="w-full border p-2 rounded"
                     required
                 />
-                <input
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    onChange={handleChange}
-                    className="w-full border p-2 rounded"
-                />
-
-                {imagePreview && (
-                    <div className="mt-2">
-                        <p className="text-sm text-gray-500 mb-1">Image Preview:</p>
-                        <img src={imagePreview} alt="Preview" className="w-32 h-32 object-cover rounded" />
-                    </div>
-                )}
 
                 <button
                     type="submit"
@@ -118,5 +92,5 @@ export default function AddProductPage() {
                 </button>
             </form>
         </div>
-    )
+    );
 }

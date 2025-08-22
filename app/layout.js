@@ -13,6 +13,7 @@ export default function RootLayout({ children }) {
           {children} {/* Each page renders its own content */}
           <Footer></Footer>
         </SessionProvider>
+        {/* <Toaster /> */}
       </body>
     </html>
   )
