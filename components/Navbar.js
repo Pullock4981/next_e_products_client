@@ -2,11 +2,11 @@
 import { useState } from "react"
 import Link from "next/link"
 import { signOut, useSession } from "next-auth/react"
-import { FaUserCircle } from "react-icons/fa" // optional: user icon
+import { FaUserCircle } from "react-icons/fa"
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
-    const { data: session } = useSession() // get user session
+    const { data: session } = useSession()
 
     return (
         <nav className="bg-gray-900 text-white px-6 py-4">
@@ -21,17 +21,21 @@ export default function Navbar() {
                     <Link href="/" className="hover:text-gray-300">Home</Link>
                     <Link href="/products" className="hover:text-gray-300">Products</Link>
 
-                    {/* Conditional rendering based on login */}
                     {session ? (
-                        <div className="flex items-center space-x-4">
-                            <FaUserCircle size={24} />
-                            <button
-                                onClick={() => signOut()}
-                                className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
-                            >
-                                Logout
-                            </button>
-                        </div>
+                        <>
+                            <Link href="/dashboard/add-product" className="hover:text-gray-300">
+                                Add Product
+                            </Link>
+                            <div className="flex items-center space-x-4">
+                                <FaUserCircle size={24} />
+                                <button
+                                    onClick={() => signOut()}
+                                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        </>
                     ) : (
                         <Link href="/login" className="hover:text-gray-300">Login</Link>
                     )}
@@ -55,15 +59,20 @@ export default function Navbar() {
                     <Link href="/products" className="hover:text-gray-300">Products</Link>
 
                     {session ? (
-                        <div className="flex items-center space-x-2">
-                            <FaUserCircle size={20} />
-                            <button
-                                onClick={() => signOut()}
-                                className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
-                            >
-                                Logout
-                            </button>
-                        </div>
+                        <>
+                            <Link href="/dashboard/add-product" className="hover:text-gray-300">
+                                Add Product
+                            </Link>
+                            <div className="flex items-center space-x-2">
+                                <FaUserCircle size={20} />
+                                <button
+                                    onClick={() => signOut()}
+                                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        </>
                     ) : (
                         <Link href="/login" className="hover:text-gray-300">Login</Link>
                     )}
