@@ -1,20 +1,37 @@
 "use client"
-import { useParams } from "next/navigation"
+
+import { useParams, useRouter } from "next/navigation"
 import Link from "next/link"
+import { useEffect, useState } from "react"
+import axios from "axios"
 
 export default function ProductDetailsPage() {
     const params = useParams()
     const { id } = params
+    const router = useRouter()
+    const [product, setProduct] = useState(null)
+    const [loading, setLoading] = useState(true)
 
-    // Mock product data (in real app, fetch from backend)
-    const products = [
-        { id: "1", name: "Product One", description: "High quality product", price: "$29" },
-        { id: "2", name: "Product Two", description: "Best seller item", price: "$49" },
-        { id: "3", name: "Product Three", description: "Limited edition", price: "$59" },
-        { id: "4", name: "Product Four", description: "Popular choice", price: "$39" },
-    ]
+    useEffect(() => {
+        async function fetchProduct() {
+            try {
+                const res = await axios.get(`http://localhost:5000/products`)
+                const found = res.data.find((p) => p._id === id)
+                setProduct(found || null)
+            } catch (err) {
+                console.error(err)
+                setProduct(null)
+            } finally {
+                setLoading(false)
+            }
+        }
 
-    const product = products.find(p => p.id === id)
+        fetchProduct()
+    }, [id])
+
+    if (loading) {
+        return <p className="text-center py-10">Loading product...</p>
+    }
 
     if (!product) {
         return (
@@ -27,9 +44,22 @@ export default function ProductDetailsPage() {
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col items-center py-16 px-6">
             <h1 className="text-3xl font-bold mb-6">{product.name}</h1>
+
+            {product.image && (
+                <img
+                    src={`http://localhost:5000/uploads/${product.image}`}
+                    alt={product.name}
+                    className="w-96 h-80 object-cover rounded mb-6"
+                />
+            )}
+
             <p className="text-gray-700 mb-4">{product.description}</p>
-            <p className="text-xl font-semibold mb-6">{product.price}</p>
-            <Link href="/products" className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700">
+            <p className="text-xl font-semibold mb-6">${product.price}</p>
+
+            <Link
+                href="/products"
+                className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
                 Back to Products
             </Link>
         </div>
