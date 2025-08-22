@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# E-Products Client
 
-## Getting Started
+A **Next.js frontend** for managing products, supporting product creation and listing.  
+Includes user authentication via **NextAuth**, toast notifications, and Tailwind CSS styling.
 
-First, run the development server:
+---
+
+## Table of Contents
+
+- [Features](#features)  
+- [Technologies](#technologies)  
+- [Installation](#installation)  
+- [Environment Variables](#environment-variables)  
+- [Available Scripts](#available-scripts)  
+- [Usage](#usage)  
+- [License](#license)  
+
+---
+
+## Features
+
+- Add new products (name, price, description).  
+- List all products fetched from backend API.  
+- Optional image upload (currently removed if not needed).  
+- Toast notifications for success/error messages via `react-hot-toast`.  
+- Authentication with **NextAuth.js** (Google provider supported).  
+- Responsive UI built with **Tailwind CSS**.  
+
+---
+
+## Technologies
+
+- **Next.js** – React framework for server-side rendering and routing  
+- **React** – UI library  
+- **NextAuth.js** – Authentication solution  
+- **Axios** – API requests  
+- **Tailwind CSS** – Styling  
+- **React Hot Toast** – Toast notifications  
+- **React Icons** – Icon library  
+
+---
+
+## Installation
+
+1. Clone the repository:
 
 ```bash
+git clone https://github.com/your-username/e_products_client.git
+Install dependencies:
+
+bash
+Copy
+Edit
+cd e_products_client
+npm install
+Create a .env.local file in the root:
+
+env
+Copy
+Edit
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_secret_key
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+Available Scripts
+In the project directory, you can run:
+
+bash
+Copy
+Edit
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Runs the app in development mode at http://localhost:3000.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+bash
+Copy
+Edit
+npm run build
+Builds the app for production.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+bash
+Copy
+Edit
+npm run start
+Starts the production server.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+bash
+Copy
+Edit
+npm run lint
+Runs ESLint for code linting.
 
-## Learn More
+Usage
+Start the backend server (e_products_server) first.
 
-To learn more about Next.js, take a look at the following resources:
+Run the frontend:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+bash
+Copy
+Edit
+npm run dev
+Open http://localhost:3000 in your browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Login using Google OAuth (via NextAuth.js).
 
-## Deploy on Vercel
+Add products and view them on the Products page.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Toast notifications show success or error feedback for actions.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Project Structure
+bash
+Copy
+Edit
+/pages
+  /dashboard
+    add-product.js      # Add new product page
+    products.js         # List products page
+/components               # Reusable React components
+/styles                   # Tailwind CSS files
