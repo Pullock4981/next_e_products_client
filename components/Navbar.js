@@ -1,9 +1,12 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
+import { signOut, useSession } from "next-auth/react"
+import { FaUserCircle } from "react-icons/fa" // optional: user icon
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false)
+    const { data: session } = useSession() // get user session
 
     return (
         <nav className="bg-gray-900 text-white px-6 py-4">
@@ -14,10 +17,24 @@ export default function Navbar() {
                 </h1>
 
                 {/* Desktop Menu */}
-                <div className="hidden md:flex space-x-6">
+                <div className="hidden md:flex items-center space-x-6">
                     <Link href="/" className="hover:text-gray-300">Home</Link>
                     <Link href="/products" className="hover:text-gray-300">Products</Link>
-                    <Link href="/login" className="hover:text-gray-300">Login</Link>
+
+                    {/* Conditional rendering based on login */}
+                    {session ? (
+                        <div className="flex items-center space-x-4">
+                            <FaUserCircle size={24} />
+                            <button
+                                onClick={() => signOut()}
+                                className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <Link href="/login" className="hover:text-gray-300">Login</Link>
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -36,7 +53,20 @@ export default function Navbar() {
                 <div className="md:hidden mt-2 flex flex-col space-y-2">
                     <Link href="/" className="hover:text-gray-300">Home</Link>
                     <Link href="/products" className="hover:text-gray-300">Products</Link>
-                    <Link href="/login" className="hover:text-gray-300">Login</Link>
+
+                    {session ? (
+                        <div className="flex items-center space-x-2">
+                            <FaUserCircle size={20} />
+                            <button
+                                onClick={() => signOut()}
+                                className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    ) : (
+                        <Link href="/login" className="hover:text-gray-300">Login</Link>
+                    )}
                 </div>
             )}
         </nav>
